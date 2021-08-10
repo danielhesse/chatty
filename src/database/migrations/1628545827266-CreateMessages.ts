@@ -21,6 +21,10 @@ export class CreateMessages1628545827266 implements MigrationInterface {
             type: "uuid",
           },
           {
+            name: "sender",
+            type: "varchar",
+          },
+          {
             name: "text",
             type: "varchar",
           },

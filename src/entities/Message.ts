@@ -18,6 +18,9 @@ export class Message {
   user: User;
 
   @Column()
+  sender: string;
+
+  @Column()
   text: string;
 
   @CreateDateColumn()

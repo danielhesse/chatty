@@ -17,5 +17,6 @@ routes.post("/users", usersController.create);
 
 // Messages
 routes.post("/messages", messagesController.create);
+routes.get("/messages/:user_id", messagesController.show);
 
 export { routes };

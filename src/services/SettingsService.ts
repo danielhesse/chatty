@@ -1,4 +1,5 @@
-import { getCustomRepository } from "typeorm";
+import { getCustomRepository, Repository } from "typeorm";
+import { Setting } from "../entities/Setting";
 import { SettingsRepository } from "../repositories/SettingsRepository";
 
 interface IRequest {
@@ -7,21 +8,25 @@ interface IRequest {
 }
 
 export class SettingsService {
-  async create({ username, chat }: IRequest) {
-    const settingsRepository = getCustomRepository(SettingsRepository);
+  private settingsRepository: Repository<Setting>;
 
-    const userAlreadyExists = await settingsRepository.findOne({ username });
+  constructor() {
+    this.settingsRepository = getCustomRepository(SettingsRepository);
+  }
+
+  async create({ username, chat }: IRequest) {
+    const userAlreadyExists = await this.settingsRepository.findOne({ username });
 
     if (userAlreadyExists) {
       throw new Error("This user already has a setting!");
     }
 
-    const setting = settingsRepository.create({
+    const setting = this.settingsRepository.create({
       username,
       chat,
     });
 
-    await settingsRepository.save(setting);
+    await this.settingsRepository.save(setting);
 
     return setting;
   }
