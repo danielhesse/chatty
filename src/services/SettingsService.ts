@@ -30,4 +30,30 @@ export class SettingsService {
 
     return setting;
   }
+
+  async searchByUsername(username: string) {
+    const setting = await this.settingsRepository.findOne({ username });
+
+    return setting;
+  }
+
+  async update(username: string, chat: boolean) {
+    const checkSettingExistence = await this.settingsRepository.findOne({
+      username
+    });
+
+    if (!checkSettingExistence) {
+      throw new Error("This setting does not exists!");
+    }
+
+    const setting = await this.settingsRepository.createQueryBuilder()
+      .update(Setting)
+      .set({ chat })
+      .where("username = :username", {
+        username
+      })
+      .execute();
+
+    return setting;
+  }
 }
