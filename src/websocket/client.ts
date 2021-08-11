@@ -64,5 +64,32 @@ io.on("connect", (socket) => {
       text,
       sender: "user",
     });
+
+    // Emit new Event to list messages
+    const allMessages = await messagesService.listByUser(user_id);
+
+    socket.emit("client_list_all_messages", allMessages);
+
+    const allUsers = await connectionsRepository.find({ where: { sender: "user" } });
+    io.emit("admin_list_all_users", allUsers);
+  });
+
+  socket.on("client_send_to_admin", async (params) => {
+    const { text, socket_admin_id } = params;
+
+    const socket_id = socket.id;
+
+    const { user_id } = await connectionsRepository.findOne({ socket_id });
+
+    const message = await messagesService.create({
+      user_id,
+      text,
+      sender: "user",
+    });
+
+    io.to(socket_admin_id).emit("admin_receive_message", {
+      socket_id,
+      message,
+    });
   });
 });
