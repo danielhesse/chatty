@@ -12,9 +12,9 @@ document.querySelector("#start_chat").addEventListener("click", (event) => {
   chat_in_support.style.display = "block";
 
   const email = document.getElementById("email").value;
-  const text = document.getElementById("txt_help").value;
-
   emailUser = email;
+
+  const text = document.getElementById("txt_help").value;
 
   socket.on("connect", () => {
     const params = {
@@ -87,5 +87,4 @@ document.querySelector("#send_message_button").addEventListener("click", (event)
 
   document.getElementById("messages").innerHTML += rendered;
   text.value = "";
-
 });

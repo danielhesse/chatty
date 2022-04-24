@@ -29,6 +29,8 @@ io.on("connect", (socket) => {
       }
     });
 
+    user_id = checkUserExistence.id;
+
     if (!checkUserExistence) {
       const user = await usersService.create({ email });
 
@@ -43,14 +45,14 @@ io.on("connect", (socket) => {
       // Verify if connection exists
       const connection = await connectionsRepository.findOne({
         where: {
-          user_id: checkUserExistence.id
+          user_id: user_id
         },
       });
 
       if (!connection) {
         // Create connection
         await connectionsService.create({
-          user_id: checkUserExistence.id,
+          user_id,
           socket_id: socket.id,
         });
       } else {
@@ -60,7 +62,7 @@ io.on("connect", (socket) => {
         await connectionsService.create(connection);
       }
 
-      user_id = checkUserExistence.id;
+      // user_id = checkUserExistence.id;
     }
 
     // Send message
