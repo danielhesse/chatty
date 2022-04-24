@@ -4,15 +4,13 @@ Chatty
 ![Badge](https://img.shields.io/static/v1?label=DH&message=DOSOMETHINGGREAT&color=0070f3&style=<0070f3>&logo=rocket)
 </h1>
 
+### Description
 
+Chatty is a simple real-time customer service chat, widget style as a floating icon on the screen.
 
-## 💻 Projeto
+This is an MVC application, you can access the chat screen at ```/pages/client``` and the admin screen at ```/pages/admin``` (its content is only visible after receiving contact from a customer)
 
-O Chatty é um chat para atendimento de clientes em tempo real.
-
-## ✨ Tecnologias
-
-Esse projeto foi desenvolvido com as seguintes tecnologias:
+### Technologies
 
 - [Node.js](https://nodejs.org/en/)
 - [Express](https://expressjs.com/pt-br/)
@@ -20,44 +18,44 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 - [TypeORM](https://typeorm.io/#/)
 - [Socket.io](https://socket.io/)
 
-## 🔗 Requisitos básicos
+### Getting Started
 
-Antes de começar, você precisará ter as seguintes ferramentas instaladas em sua máquina:
+Before you begin, you will need to have the following tools installed on your machine:
 - [Git](https://git-scm.com)
 
-O projeto pode ser construído com npm ou yarn, então escolha uma das abordagens abaixo caso você não tenha nenhum instalado em seu sistema.
+The project can be built with npm or yarn, so choose one of the approach bellow in case you don't have any installed on your system.
 
-O Npm é distribuído com o Node.js, o que significa que quando você faz o download do Node.js, o npm é instalado automaticamente no seu computador
-- [Node.js v14.16.0](https://nodejs.org/) ou maior.
+Npm is distributed with Node.js which means that when you download Node.js, you automatically get npm installed on your computer.
+- [Node.js v16.14.0](https://nodejs.org/) or heigher.
 
-Yarn é um gerenciador de pacotes criado pela equipe do Facebook e parece ser mais rápido do que o npm em geral.
-- [Yarn v1.22.5](https://yarnpkg.com/) ou maior.
+Yarn is a package manager created by the Facebook team and seems to be faster than npm in general.
+- [Yarn v1.22.5](https://yarnpkg.com/) or heigher.
 
-Além disso, é bom ter um editor para trabalhar com o código, como [VSCode](https://code.visualstudio.com/).
+Also, it’s good to have an editor to work with the code like [VSCode](https://code.visualstudio.com/).
 
-## :information_source: Como executar
+### :information_source: How to run
 
-Siga as instruções abaixo para baixar e usar o projeto deste repositório:
+Follow the instructions below to download and use the project from this repository:
 
 ```bash
-# Clone este repositório usando SSH
+# Clone this repository using SSH
 $ git clone git@github.com:danielhessell/chatty.git
-# ou clone usando https
+# or clone using https
 $ git clone https://github.com/danielhessell/chatty.git
 
-# Vá para o repositório
+# Go into the repository
 $ cd chatty
 
-# Instale as dependências
+# Install dependencies
 $ yarn
 
-# Executar migrações do banco
-$ yarn typeorm migration:run
+# Run migrations
+$ yarn typeorm migration:run --dataSource ./src/database/index.ts
 
-# Executar projeto
+# Run project
 $ yarn dev:server
 ```
 
 ---
 
-Made with :blue_heart: by [Daniel Hessel](https://www.linkedin.com/in/daniel-hessel-240731176/) :wave:
+Made with :blue_heart: by Daniel Hessel :wave:
