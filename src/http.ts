@@ -1,12 +1,10 @@
-import "reflect-metadata";
 import express from "express";
 import { createServer } from "http";
 import { Server, Socket } from "socket.io";
 import path from "path";
 
 import { routes } from "./routes";
-
-import "./database";
+import { AppDataSource } from "./database";
 
 const app = express();
 

@@ -1,11 +1,10 @@
-import { getCustomRepository } from "typeorm";
 import { io } from "../http";
-
 import { ConnectionsRepository } from "../repositories/ConnectionsRepository";
 import { UsersRepository } from "../repositories/UsersRepository";
 import { ConnectionsService } from "../services/ConnectionsService";
 import { MessagesService } from "../services/MessagesService";
 import { UsersService } from "../services/UsersService";
+
 
 type ParamsProps = {
   email: string;
@@ -17,14 +16,18 @@ io.on("connect", (socket) => {
   const usersService = new UsersService();
   const messagesService = new MessagesService();
 
-  const usersRepository = getCustomRepository(UsersRepository);
-  const connectionsRepository = getCustomRepository(ConnectionsRepository);
+  const usersRepository = UsersRepository;
+  const connectionsRepository = ConnectionsRepository;
 
   socket.on("client_first_access", async (params: ParamsProps) => {
     let user_id = null;
     const { email, text } = params;
 
-    const checkUserExistence = await usersRepository.findOne({ email });
+    const checkUserExistence = await usersRepository.findOne({
+      where: {
+        email
+      }
+    });
 
     if (!checkUserExistence) {
       const user = await usersService.create({ email });
@@ -39,7 +42,9 @@ io.on("connect", (socket) => {
     } else {
       // Verify if connection exists
       const connection = await connectionsRepository.findOne({
-        where: { user_id: checkUserExistence },
+        where: {
+          user_id: checkUserExistence.id
+        },
       });
 
       if (!connection) {
@@ -70,7 +75,10 @@ io.on("connect", (socket) => {
 
     socket.emit("client_list_all_messages", allMessages);
 
-    const allUsers = await connectionsRepository.find({ where: { sender: "user" } });
+    const allUsers = await connectionsRepository.find({
+      where: { admin_id: null },
+      relations: ["user"],
+    });
     io.emit("admin_list_all_users", allUsers);
   });
 
@@ -79,7 +87,11 @@ io.on("connect", (socket) => {
 
     const socket_id = socket.id;
 
-    const { user_id } = await connectionsRepository.findOne({ socket_id });
+    const { user_id } = await connectionsRepository.findOne({
+      where: {
+        socket_id
+      }
+    });
 
     const message = await messagesService.create({
       user_id,

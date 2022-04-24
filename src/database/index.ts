@@ -1,3 +1,11 @@
-import { createConnection } from "typeorm";
+import { DataSource } from "typeorm";
 
-createConnection();
+export const AppDataSource = new DataSource({
+  type: "sqlite",
+  database: "./src/database/database.sqlite",
+  synchronize: true,
+  logging: true,
+  entities: ["./src/entities/**.ts"],
+  subscribers: [],
+  migrations: ["./src/database/migrations/**.ts"],
+})

@@ -7,8 +7,8 @@ export class Connection {
   @PrimaryColumn()
   readonly id: string;
 
-  @Column()
-  admin_id: string;
+  @Column({ nullable: true })
+  admin_id?: string;
 
   @Column()
   user_id: string;

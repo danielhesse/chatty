@@ -1,10 +1,10 @@
-import { getCustomRepository } from "typeorm";
+import { Connection } from "../entities/Connection";
 import { io } from "../http";
 import { ConnectionsRepository } from "../repositories/ConnectionsRepository";
 import { MessagesService } from "../services/MessagesService";
 
 io.on("connect", async (socket) => {
-  const connectionsRepository = getCustomRepository(ConnectionsRepository);
+  const connectionsRepository = ConnectionsRepository;
   const messagesService = new MessagesService();
 
   const allConnectionsWithoutAdmin = await connectionsRepository.find({
@@ -32,7 +32,11 @@ io.on("connect", async (socket) => {
       sender: "admin",
     });
 
-    const { socket_id } = await connectionsRepository.findOne({ user_id });
+    const { socket_id } = await connectionsRepository.findOne({
+      where: {
+        user_id
+      }
+    });
 
     io.to(socket_id).emit("admin_send_to_client", {
       text,
@@ -42,6 +46,20 @@ io.on("connect", async (socket) => {
 
   socket.on("admin_user_in_support", async params => {
     const { user_id } = params;
-    const connection = await connectionsRepository.findOne({ user_id });
+    await connectionsRepository
+      .createQueryBuilder()
+      .update(Connection)
+      .set({ socket_id: socket.id })
+      .where("user_id = :user_id", {
+        user_id,
+      })
+      .execute();
+
+    const allConnectionsWithoutAdmin = await connectionsRepository.find({
+      where: { admin_id: null },
+      relations: ["user"],
+    });
+
+    io.emit("admin_list_all_users", allConnectionsWithoutAdmin);
   });
 });

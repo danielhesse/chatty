@@ -8,14 +8,14 @@ interface IRequest {
 }
 
 export class SettingsService {
-  private settingsRepository: Repository<Setting>;
-
-  constructor() {
-    this.settingsRepository = getCustomRepository(SettingsRepository);
-  }
+  private settingsRepository = SettingsRepository;
 
   async create({ username, chat }: IRequest) {
-    const userAlreadyExists = await this.settingsRepository.findOne({ username });
+    const userAlreadyExists = await this.settingsRepository.findOne({
+      where: {
+        username
+      }
+    });
 
     if (userAlreadyExists) {
       throw new Error("This user already has a setting!");
@@ -32,14 +32,20 @@ export class SettingsService {
   }
 
   async searchByUsername(username: string) {
-    const setting = await this.settingsRepository.findOne({ username });
+    const setting = await this.settingsRepository.findOne({
+      where: {
+        username
+      }
+    });
 
     return setting;
   }
 
   async update(username: string, chat: boolean) {
     const checkSettingExistence = await this.settingsRepository.findOne({
-      username
+      where: {
+        username
+      }
     });
 
     if (!checkSettingExistence) {

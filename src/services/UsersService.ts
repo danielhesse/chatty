@@ -1,4 +1,5 @@
-import { getCustomRepository, Repository } from "typeorm";
+import { Repository } from "typeorm";
+import { AppDataSource } from "../database";
 import { User } from "../entities/User";
 import { UsersRepository } from "../repositories/UsersRepository";
 
@@ -7,14 +8,14 @@ interface IRequest {
 }
 
 export class UsersService {
-  private usersRepository: Repository<User>;
-
-  constructor() {
-    this.usersRepository = getCustomRepository(UsersRepository);
-  }
+  private usersRepository = UsersRepository;
 
   async create({ email }: IRequest) {
-    const userAlreadyExists = await this.usersRepository.findOne({ email });
+    const userAlreadyExists = await this.usersRepository.findOne({
+      where: {
+        email
+      }
+    });
 
     if (userAlreadyExists) {
       return userAlreadyExists;

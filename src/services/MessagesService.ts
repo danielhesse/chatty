@@ -10,11 +10,7 @@ interface IRequest {
 }
 
 export class MessagesService {
-  private messagesRepository: Repository<Message>;
-
-  constructor() {
-    this.messagesRepository = getCustomRepository(MessagesRepository);
-  }
+  private messagesRepository = MessagesRepository;
 
   async create({ user_id, admin_id, sender, text }: IRequest) {
     const message = this.messagesRepository.create({
